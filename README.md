@@ -13,6 +13,9 @@ To start a web server for the application, run:
 
     lein ring server
 
+    TEST URL: http://localhost:3000/api/travis/test
+
+    ;#=> what's up buddy!
 ## License
 
 MIT
