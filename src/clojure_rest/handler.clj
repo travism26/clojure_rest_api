@@ -59,8 +59,7 @@
 (defn get-all-documents []
   (response
    (sql/query (db-connection)
-              ["select * from documents limit 25"]
-              :as-arrays? true)))
+              ["select * from documents limit 25"])))
 
 (defn get-document [id]
   (into [] 
