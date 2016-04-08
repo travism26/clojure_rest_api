@@ -6,13 +6,20 @@
   (:require [compojure.handler :as handler]
             [ring.middleware.json :as middleware]
             [clojure.java.jdbc :as sql]
-            [compojure.route :as route]))
+            [compojure.route :as route]
+            [clojure-rest.db :as db]))
 
+; full jdbcURL
+;jdbc:postgresql://localhost/test?user=fred&password=secret&ssl=true
 (def db-config
-  {:classname "org.h2.Driver"
-   :subprotocol "h2"
-   :subname "mem:documents"
-   :user ""
+  {
+   :classname "org.postgresql.Driver"
+   ;:classname "org.h2.Driver"
+   :subprotocol "postgresql"
+   ;:subprotocol "h2"
+   :subname "//localhost/clojure_test"
+   ;:subname "mem:document" -> in memory database;
+   :user "postgres"
    :password ""})
 
 (defn pool
@@ -27,49 +34,55 @@
                (.setInitialPoolSize 1))]
     {:datasource cpds}))
 
-(def pooled-db (delay (pool db-config)))
+(def pooled-db (delay (pool db/db-config)))
 
 (defn db-connection [] @pooled-db)
 
-(sql/with-connection (db-connection)
-                                        ;  (sql/drop-table :documents) ; no need to do that for in-memory databases
-  (sql/create-table :documents [:id "varchar(256)" "primary key"]
-                    [:title "varchar(1024)"]
-                    [:text :varchar]))
+;check if the table schemas are created.
+(defn db-schema-migrated?
+  []
+  (-> (sql/query (db-connection)
+                 [(str "select count(*) from information_schema.tables where table_name = 'documents' ")])
+      first :count pos?))
+
+(when (not(db-schema-migrated?))
+ (sql/db-do-commands (db-connection)
+  ;(sql/drop-table :documents) ; no need to do that for in-memory databases
+   (sql/create-table-ddl
+    :documents 
+    [:id "varchar(256)" "primary key"]
+    [:title "varchar(1024)"]
+    [:text :varchar])))
 
 (defn uuid [] (str (java.util.UUID/randomUUID)))
 
 (defn get-all-documents []
-  (response
-   (sql/with-connection (db-connection)
-     (sql/with-query-results results
-       ["select * from documents"]
-       (into [] results)))))
+  (into [] (sql/query (db-connection)
+                      ["select * from documents limit 25"])))
 
 (defn get-document [id]
-  (sql/with-connection (db-connection)
-    (sql/with-query-results results
-      ["select * from documents where id = ?" id]
-      (cond
-       (empty? results) {:status 404}
-       :else (response (first results))))))
+  (into [] 
+        (sql/query (db-connection)
+                   ["select * from documents where id = ?" id]
+                   (cond
+                    (empty?) {:status 404}
+                    :else (response (first))))))
 
 (defn create-new-document [doc]
   (let [id (uuid)]
-    (sql/with-connection (db-connection)
-      (let [document (assoc doc "id" id)]
-        (sql/insert-record :documents document)))
+    (let [document (assoc doc "id" id)]
+      (sql/insert! (db-connection) :documents document))
     (get-document id)))
 
 (defn update-document [id doc]
-  (sql/with-connection (db-connection)
-    (let [document (assoc doc "id" id)]
-      (sql/update-values :documents ["id=?" id] document)))
+  (let [document (assoc doc "id" id)]
+    (sql/update! (db-connection)
+     :documents ["id=?" id] document))
   (get-document id))
 
 (defn delete-document [id]
-  (sql/with-connection (db-connection)
-    (sql/delete-rows :documents ["id=?" id]))
+  (sql/delete! (db-connection)
+   :documents ["id=?" id])
   {:status 204})
 
 (defroutes app-routes
