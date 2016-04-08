@@ -6,13 +6,15 @@ Decided to learn clojure, create a rest web app, and use reactJS for the UI.
 You will need [Leiningen][] 2.0.0 or above installed.
 
 [leiningen]: https://github.com/technomancy/leiningen
-[Postgresql]: https://wiki.postgresql.org/wiki/Detailed_installation_guides
+[postgresql]: https://wiki.postgresql.org/wiki/Detailed_installation_guides.
 
 ## Setup Backend
 
    Run CLI commands:
    `createuser postgres` or whatever your username you want.
+
    `createdb -U postgres -p 5432 -E UTF8 -O postgres clojure_test` Replace postgres with user you created.
+
 Note: tables will be created when lein starts up if your schema is not already created it will auto create it for you.
 
 ## Running
