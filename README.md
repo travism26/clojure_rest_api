@@ -5,6 +5,8 @@ Decided to learn clojure, create a rest web app, and use reactJS for the UI.
 
 You will need [Leiningen][] 2.0.0 or above installed.
 
+You will need [Postgresql][] installed.
+
 [leiningen]: https://github.com/technomancy/leiningen
 [postgresql]: https://wiki.postgresql.org/wiki/Detailed_installation_guides.
 
