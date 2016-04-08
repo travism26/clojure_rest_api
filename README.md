@@ -34,6 +34,7 @@ To start a web server for the application, run:
 CLIs
 
 `psql -U postgres -d clojure_test`
+
 `insert into documents (id, title, text) VALUES ('xues1-123sc2-fsasda3-2123s','This is a title', 'Im Back!');`
 
 ## License
