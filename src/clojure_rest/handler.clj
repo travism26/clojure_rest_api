@@ -57,8 +57,10 @@
 (defn uuid [] (str (java.util.UUID/randomUUID)))
 
 (defn get-all-documents []
-  (into [] (sql/query (db-connection)
-                      ["select * from documents limit 25"])))
+  (response
+   (sql/query (db-connection)
+              ["select * from documents limit 25"]
+              :as-arrays? true)))
 
 (defn get-document [id]
   (into [] 
