@@ -8,20 +8,8 @@
             ;[clojure.java.jdbc :as sql]
             [compojure.route :as route]
             ;[clojure-rest.db :as db]
-            [clojure-rest.documents.requests :as doc]))
-
-; full jdbcURL
-;jdbc:postgresql://localhost/test?user=fred&password=secret&ssl=true
-;; (def db-config7258354685694424
-;;   {
-;;    :classname "org.postgresql.Driver"
-;;    ;:classname "org.h2.Driver"
-;;    :subprotocol "postgresql"
-;;    ;:subprotocol "h2"
-;;    :subname "//localhost/clojure_test"
-;;    ;:subname "mem:document" -> in memory database;
-;;    :user "postgres"
-;;    :password ""})
+            [clojure-rest.documents.requests :as doc]
+            [clojure-rest.apicall :as api]))
 
 ;(def pooled-db (delay (pool db/db-config)))
 
@@ -49,6 +37,7 @@
         (POST "/" {body :body} (doc/create-new-document body))
         (GET "/test" [] "what's up buddy!")
         (GET "/request" [] (doc/request))
+        (GET "/test/data" [] (api/dummy-data))
         (context "/:id" [id] 
                  (defroutes document-routes
                    (GET    "/" [] (doc/get-document id))

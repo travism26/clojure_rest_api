@@ -11,7 +11,8 @@
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.1"]
 ;                [com.h2database/h2 "1.3.168"] ; only require for in mem DB
                  [org.postgresql/postgresql "9.4.1208.jre7"]
-                 [cheshire "4.0.3"]]
+                 [cheshire "4.0.3"]
+                 [clj-http "3.0.0"]]
   :plugins [[lein-ring "0.9.7"]]
   :ring {:handler clojure-rest.handler/app}
   :profiles
