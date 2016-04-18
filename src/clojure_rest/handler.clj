@@ -1,5 +1,5 @@
 (ns clojure-rest.handler
- ; (:import com.mchange.v2.c3p0.ComboPooledDataSource)
+; (:import com.mchange.v2.c3p0.ComboPooledDataSource)
   (:use compojure.core)
   (:use cheshire.core)
   (:use ring.util.response)
@@ -7,7 +7,7 @@
             [ring.middleware.json :as middleware]
             ;[clojure.java.jdbc :as sql]
             [compojure.route :as route]
-            ;[clojure-rest.db :as db]
+            [clojure-rest.db :as db]
             [clojure-rest.documents.requests :as doc]
             [clojure-rest.apicall :as api]))
 
@@ -30,6 +30,9 @@
 ;;     [:id "varchar(256)" "primary key"]
 ;;     [:title "varchar(1024)"]
 ;;     [:text :varchar])))
+
+;This is to check if the schema is built, not sure if this is needed or not
+(db/db-schema-check)
 
 (defroutes app-routes
   (context "/api/travis" [] (defroutes documents-routes

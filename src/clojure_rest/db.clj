@@ -41,11 +41,19 @@
                  [(str "select count(*) from information_schema.tables where table_name = 'documents' ")])
       first :count pos?))
 
+(defn hello []
+  (println "Hello world"))
+
+(defn db-schema-check []
+(println "-------Checking if Schema is deployed!-------")
 (when (not(db-schema-migrated?))
- (sql/db-do-commands (db-connection)
-  ;(sql/drop-table :documents) ; no need to do that for in-memory databases
-   (sql/create-table-ddl
-    :documents 
-    [:id "varchar(256)" "primary key"]
-    [:title "varchar(1024)"]
-    [:text :varchar])))
+   (sql/db-do-commands 
+    (db-connection)
+                       ;(sql/drop-table :documents) ; no need to do that for in-memory databases
+    (sql/create-table-ddl
+     :documents 
+     [:id "varchar(256)" "primary key"]
+     [:title "varchar(1024)"]
+     [:text :varchar]))
+   (println "-------Deployed New Schema------"))
+(println "-----Already deployed-----"))
