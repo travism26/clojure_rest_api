@@ -47,3 +47,4 @@
   (sql/delete! (db-connection)
    :documents ["id=?" id])
   {:status 204})
+

@@ -40,6 +40,8 @@
   (-> (sql/query (db-connection)
                  [(str "select count(*) from information_schema.tables where table_name = 'documents' ")])
       first :count pos?))
+; database tables to keep track of your wishlist...things you wanna buy.
+; Product, Prices, Tags
 
 (defn hello []
   (println "Hello world"))
