@@ -5,3 +5,4 @@
 
 (defn dummy-data [] 
   (client/get "http://jsonplaceholder.typicode.com/posts/" {:accept :json}))
+
