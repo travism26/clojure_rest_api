@@ -54,7 +54,7 @@
       (middleware/wrap-json-response)))
 
 
-;LEARNING CLOJURE! dont judge :)
+;LEARNING CLOJURE! dont judge :) IM BACK
 ;; (ns clojure-rest.handler
 ;;   (:require [compojure.core :refer :all]
 ;;             [compojure.route :as route]
